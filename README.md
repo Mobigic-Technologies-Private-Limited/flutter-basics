@@ -1,158 +1,166 @@
-# flutter_basics
+Here is a complete README.md for your package flutter_basics, including logging, file write, and upload logs.
+You can copy-paste this directly into your repository.
 
-[![Pub Package](https://img.shields.io/pub/v/logger.svg)](https://pub.dev/packages/logger)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+flutter_basics
 
-Small, easy-to-use, and extensible logger for Flutter and Dart applications. **flutter_basics** provides a production-safe logging utility via `MobigicLogger`, which automatically disables log printing in release/production mode.
 
-Designed and maintained by **Mobigic Technology**.
 
----
 
-## Features
+A lightweight, production-safe utility package for Flutter applications providing structured logging, file-based log storage, and manual log upload support.
 
-* Simple and lightweight logging API
-* Supports multiple log levels: trace, debug, info, warning, error, fatal
-* Pretty and readable log output
-* Supports logging objects like `List`, `Map`, and `Set`
-* Configurable log filtering and formatting
-* Extensible architecture (custom filters, printers, and outputs)
-* Works seamlessly with Flutter, Dart, and in-app update workflows
+Designed and maintained by Mobigic Technology.
 
----
+✨ Features
 
-## Getting Started
+✅ Production-safe logger (MobigicLogger)
 
-Add the dependency:
+🧾 Supports log levels: trace, debug, info, warning, error, fatal
 
-```yaml
+🚫 Automatically disables console logs in release mode
+
+💾 Persistent file-based logging using LogService
+
+☁️ Manual log upload support
+
+🧹 Clear logs after successful upload
+
+📱 Works with Flutter mobile apps (Android & iOS)
+
+🔄 Useful for crash tracking & in-app update debugging
+
+📦 Installation
+
+Add the dependency in pubspec.yaml:
+
 dependencies:
   flutter_basics: ^latest
-```
 
-Import the package:
 
-```dart
-import 'package:flutter_basics/flutter_basics.dart';
-```
+Run:
 
----
+flutter pub get
 
-## Usage
-
-Use `MobigicLogger` for structured logging across your app. Logs are **automatically disabled in production (release mode)**.
-
-```dart
+📥 Import
 import 'package:flutter_basics/flutter_basics.dart';
 
+🚀 Usage
+Console Logging (MobigicLogger)
 MobigicLogger.debug("Debug message");
 MobigicLogger.info("Info message");
 MobigicLogger.warning("Warning message");
 MobigicLogger.error("Error message");
-```
 
-You can also log objects:
 
-```dart
-MobigicLogger.info({"status": "success", "version": 1});
-```
+Log objects easily:
 
----
+MobigicLogger.info({
+  "status": "success",
+  "version": 1,
+});
 
-## Log Levels
-
-`MobigicLogger` supports the following log levels:
-
-```dart
+🧱 Log Levels
 MobigicLogger.trace("Trace log");
 MobigicLogger.debug("Debug log");
 MobigicLogger.info("Info log");
 MobigicLogger.warning("Warning log");
 MobigicLogger.error("Error log");
-MobigicLogger.fatal("Fatal log", error: error, stackTrace: stackTrace);
-```
-
-### Production Safety
-
-* ✅ Logs are shown **only in debug/profile mode**
-* 🚫 Logs are **automatically disabled in release builds**
-* No manual flags required
-
----
-
-## Configuration Options
-
-When creating a logger, you can pass multiple options:
-
-```dart
-var logger = Logger(
-  filter: null, // Default LogFilter (logs only in debug mode)
-  printer: PrettyPrinter(), // Formats and prints logs
-  output: null, // Default LogOutput (prints to console)
+MobigicLogger.fatal(
+  "Fatal error",
+  error: error,
+  stackTrace: stackTrace,
 );
-```
 
-### PrettyPrinter Options
+🔒 Production Safety
 
-```dart
+✅ Logs print only in debug/profile
+
+🚫 No console logs in release builds
+
+⚙️ No manual flags required
+
+💾 File-Based Logging (LogService)
+
+LogService allows you to persist logs into a local file for later upload or debugging.
+
+Write Logs to File
+await LogService.writeLog("Home screen opened");
+await LogService.writeLog("User clicked submit button");
+await LogService.writeLog("CRASH ERROR: API failed");
+
+
+Each entry is saved with a timestamp:
+
+2025-12-16T10:30:15.432 -> Home screen opened
+
+☁️ Upload Logs
+
+Useful for Report Issue, Support, or Crash Recovery flows.
+
+Future<void> uploadLogs() async {
+  final file = await LogService.getLogFileToUpload();
+
+  try {
+    await LogService.writeLog("Manual log upload initiated by user");
+
+    await MobigicHelper.uploadFile(file);
+
+    // Clear logs after successful upload
+    await file.writeAsString("");
+
+    MobigicLogger.info("Logs uploaded & cleared successfully");
+  } catch (e) {
+    await LogService.writeLog("Upload failed: $e");
+    MobigicLogger.error("Log upload failed", error: e);
+  }
+}
+
+📂 Log File Location
+
+Logs are stored at:
+
+ApplicationDocumentsDirectory/kalnirnay_logs.txt
+
+
+This file can be:
+
+Uploaded to backend
+
+Shared with support teams
+
+Attached to crash reports
+
+✅ Recommended Usage
+Purpose	Tool
+Debug / Development logs	MobigicLogger
+Production persistent logs	LogService
+Manual issue reporting	Log upload
+Crash diagnostics	File logs
+🧩 Configuration (Advanced)
+
+You can customize logger behavior if needed:
+
 var logger = Logger(
   printer: PrettyPrinter(
-    methodCount: 2, // Number of method calls shown
-    errorMethodCount: 8, // Method calls when stacktrace is provided
-    lineLength: 120, // Width of output
-    colors: true, // Enable colors
-    printEmojis: true, // Show emojis for log levels
-    dateTimeFormat: DateTimeFormat.onlyTimeAndSinceStart,
+    methodCount: 2,
+    lineLength: 120,
+    colors: true,
+    printEmojis: true,
   ),
 );
-```
 
----
+🤝 Contributing
 
-## Auto Detection (IO)
+Contributions are welcome!
 
-Using `dart:io`, the logger can automatically detect terminal width and color support:
+Open issues for bugs or suggestions
 
-```dart
-import 'dart:io' as io;
+Submit pull requests for improvements
 
-var logger = Logger(
-  printer: PrettyPrinter(
-    colors: io.stdout.supportsAnsiEscapes,
-    lineLength: io.stdout.terminalColumns,
-  ),
-);
-```
+🏆 Acknowledgments
 
-This is recommended unless you are targeting web platforms.
+This package was originally created and enhanced by
+Tejeshvi Jagtap, focusing on real-world production debugging needs and scalable Flutter architecture.
 
----
+📜 License
 
-## LogFilter
-
-`LogFilter` controls which logs are shown.
-
-The default `DevelopmentFilter`:
-
-* Shows all logs with level >= `Logger.level` in debug mode
-* Omits all logs in release mode
-
-
-
-## Resources
-
-* 📦 Pub Package
-* 📘 Documentation
-* 💻 GitHub Repository
-
----
-
-## Contributing
-
-Contributions are welcome! Please open issues or pull requests to help improve this package.
-
----
-
-## Acknowledgments
-
-This package was originally created by **Tejeshvi Jagtap** who significantly enhanced its functionality over time.
+MIT License © Mobigic Technology
