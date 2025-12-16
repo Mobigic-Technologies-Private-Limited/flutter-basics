@@ -155,4 +155,4 @@ Contributions are welcome! Please open issues or pull requests to help improve t
 
 ## Acknowledgments
 
-This package was originally created by **Simon Choi**, with further development by **Harm Aarts**, who significantly enhanced its functionality over time.
+This package was originally created by **Tejeshvi Jagtap** who significantly enhanced its functionality over time.
