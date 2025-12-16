@@ -116,9 +116,7 @@ Future<void> uploadLogs() async {
 
 📂 Log File Location
 
-Logs are stored at:
 
-ApplicationDocumentsDirectory/kalnirnay_logs.txt
 
 
 This file can be:

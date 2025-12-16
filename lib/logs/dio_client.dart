@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'enum.dart';
+
 class DioClient {
   final Dio _dio = Dio();
 
@@ -11,17 +12,12 @@ class DioClient {
     bool isLogUpload = true,
   }) async {
     try {
-      final headers = {
-        'Content-Type': 'multipart/form-data',
-      };
+      final headers = {'Content-Type': 'multipart/form-data'};
 
       final response = await _dio.request(
         url,
         data: formData,
-        options: Options(
-          method: method.name.toUpperCase(),
-          headers: headers,
-        ),
+        options: Options(method: method.name.toUpperCase(), headers: headers),
       );
 
       return response;
