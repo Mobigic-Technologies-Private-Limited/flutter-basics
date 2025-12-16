@@ -1,6 +1,6 @@
 name: flutter_basics
 description: "A lightweight Flutter package providing production-safe logging and in-app update utilities."
-version: 0.0.1
+version: 0.0.2
 license: MIT
 homepage: https://github.com/Mobigic-Technologies-Private-Limited/flutter-basics
 repository: https://github.com/Mobigic-Technologies-Private-Limited/flutter-basics
