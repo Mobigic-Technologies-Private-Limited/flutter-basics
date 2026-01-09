@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
-## [0.0.2] 
+## [0.0.3] 
 
 ### Added
 
