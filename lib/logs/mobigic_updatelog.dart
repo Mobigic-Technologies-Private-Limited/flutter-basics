@@ -4,7 +4,7 @@ import 'package:dio/dio.dart';
 class MobigicHelper {
   static final Dio _dio = Dio();
 
-  static Future<Response> uploadFile(File file) async {
+  static Future<Response> uploadFile(File file, String jwtToken) async {
     String fileName = file.path.split('/').last;
 
     FormData formData = FormData.fromMap({
@@ -12,8 +12,9 @@ class MobigicHelper {
     });
 
     return await _dio.post(
-      "https://hrapi-dev.hr360app.com/v1/log-file",
+      "https://hrapi.mobigic.com/log-file",
       data: formData,
+      options: Options(headers: {"Authorization": "Bearer $jwtToken"}),
     );
   }
 }
