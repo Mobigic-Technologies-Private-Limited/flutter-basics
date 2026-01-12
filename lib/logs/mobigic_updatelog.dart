@@ -1,20 +1,44 @@
 import 'dart:io';
-import 'package:dio/dio.dart';
-
+import 'package:flutter_basics/logs/upload_result.dart';
+import 'package:http/http.dart' as http;
 class MobigicHelper {
-  static final Dio _dio = Dio();
+  Future<UploadResult> uploadLogFileHttp(File file, String jwt) async {
+    try {
+      final uri = Uri.parse("https://hrapi.mobigic.com/log-file");
 
-  static Future<Response> uploadFile(File file, String jwtToken) async {
-    String fileName = file.path.split('/').last;
+      final request = http.MultipartRequest('POST', uri);
 
-    FormData formData = FormData.fromMap({
-      "file": await MultipartFile.fromFile(file.path, filename: fileName),
-    });
+      request.headers.addAll({
+        'Authorization': 'Bearer $jwt',
+        'Accept': 'application/json',
+      });
 
-    return await _dio.post(
-      "https://hrapi.mobigic.com/log-file",
-      data: formData,
-      options: Options(headers: {"Authorization": "Bearer $jwtToken"}),
-    );
+      request.files.add(
+        await http.MultipartFile.fromPath('file', file.path),
+      );
+
+      final streamedResponse = await request.send();
+      final responseBody = await streamedResponse.stream.bytesToString();
+
+      if (streamedResponse.statusCode == 200) {
+        return UploadResult(
+          success: true,
+          statusCode: 200,
+          message: responseBody,
+        );
+      } else {
+        return UploadResult(
+          success: false,
+          statusCode: streamedResponse.statusCode,
+          message: responseBody,
+        );
+      }
+    } catch (e) {
+      return UploadResult(
+        success: false,
+        statusCode: 0,
+        message: e.toString(),
+      );
+    }
   }
 }
